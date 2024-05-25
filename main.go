@@ -27,18 +27,20 @@ func NewLogger(writer io.Writer) *Logger {
 func (l *Logger) log(level LogLevel, msg string, args ...interface{}) {
 	timestamp := time.Now().Format(time.RFC3339)
 	levelStr := []string{"DEBUG", "INFO", "WARN", "ERROR"}[level]
-  logMsg := fmt.Sprintf("%.20s [%.6s] %s", timestamp, levelStr, msg)
+	logMsg := fmt.Sprintf("%.20s [%.6s] %s", timestamp, levelStr, msg)
 	for i := 0; i < len(args); i += 2 {
-    if i == 0 { logMsg += " {" }
-    logMsg += fmt.Sprintf("%v: %v", args[i], args[i+1])
-    if i == len(args) - 2 {
-      logMsg += "}"
-    } else {
-      logMsg += ", "
-    }
+		if i == 0 {
+			logMsg += " {"
+		}
+		logMsg += fmt.Sprintf("%v: %v", args[i], args[i+1])
+		if i == len(args)-2 {
+			logMsg += "}"
+		} else {
+			logMsg += ", "
+		}
 	}
-  logMsg += "\n"
-  l.writer.Write([]byte(logMsg))
+	logMsg += "\n"
+	l.writer.Write([]byte(logMsg))
 }
 
 func (l *Logger) Debug(msg string) {
